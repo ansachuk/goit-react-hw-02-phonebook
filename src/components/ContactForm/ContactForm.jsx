@@ -1,5 +1,7 @@
 import { Component } from 'react';
 
+import { nanoid } from 'nanoid';
+
 const INITIAL_STATE = {
   name: '',
   number: '',
@@ -13,9 +15,22 @@ export default class ContactForm extends Component {
     this.setState({ [name]: value });
   };
 
+  onFormSubmit = e => {
+    e.preventDefault();
+    const form = e.currentTarget;
+
+    this.setState({ ...INITIAL_STATE });
+
+    return this.props.onSubmit({
+      name: form.name.value,
+      number: form.number.value,
+      id: nanoid(),
+    });
+  };
+
   render() {
     return (
-      <form onSubmit={this.props.onSubmit}>
+      <form onSubmit={this.onFormSubmit}>
         <label>
           Name
           <input

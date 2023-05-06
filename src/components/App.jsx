@@ -1,14 +1,11 @@
 import { Component } from 'react';
 
-import { nanoid } from 'nanoid';
+// import { nanoid } from 'nanoid';
 
 import ContactForm from './ContactForm/ContactForm';
 import Filter from './Filter/Filter';
 import ContactList from './ContactList/ContactList';
-
-const INITIAL_STATE = {
-  filter: '',
-};
+import { Notify } from 'notiflix';
 
 export class App extends Component {
   state = {
@@ -18,7 +15,7 @@ export class App extends Component {
       { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
-    ...INITIAL_STATE,
+    filter: '',
   };
 
   onInputChange = e => {
@@ -26,19 +23,21 @@ export class App extends Component {
     this.setState({ [name]: value });
   };
 
-  onContactSave = e => {
-    e.preventDefault();
-    const form = e.currentTarget;
+  onContactSave = contactData => {
+    const hasSameContactName = this.state.contacts.some(
+      contact => contact.name === contactData.name
+    );
 
-    this.setState(prevState => {
-      return {
-        contacts: [
-          ...prevState.contacts,
-          { name: form.name.value, number: form.number.value, id: nanoid() },
-        ],
-        ...INITIAL_STATE,
-      };
-    });
+    if (!hasSameContactName) {
+      Notify.success('Contact has added!');
+      return this.setState(prevState => {
+        return {
+          contacts: [...prevState.contacts, contactData],
+        };
+      });
+    }
+
+    return Notify.failure(`${contactData.name} is already in contacts!`);
   };
 
   render() {
