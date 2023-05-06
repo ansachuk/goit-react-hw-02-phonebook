@@ -1,7 +1,5 @@
 import { Component } from 'react';
 
-import { nanoid } from 'nanoid';
-
 const INITIAL_STATE = {
   name: '',
   number: '',
@@ -10,29 +8,19 @@ const INITIAL_STATE = {
 export default class ContactForm extends Component {
   state = { ...INITIAL_STATE };
 
-  onContactSave = e => {
-    e.preventDefault();
-    const form = e.currentTarget;
-
-    this.setState(prevState => {
-      return {
-        contacts: [
-          ...prevState.contacts,
-          { name: form.name.value, number: form.number.value, id: nanoid() },
-        ],
-        ...INITIAL_STATE,
-      };
-    });
+  onInputChange = e => {
+    const { name, value } = e.currentTarget;
+    this.setState({ [name]: value });
   };
 
   render() {
     return (
-      <form onSubmit={this.props.onContactSave}>
+      <form onSubmit={this.props.onSubmit}>
         <label>
           Name
           <input
             value={this.state.name}
-            onChange={this.props.onInputChange}
+            onChange={this.onInputChange}
             type="text"
             name="name"
             pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
@@ -44,7 +32,7 @@ export default class ContactForm extends Component {
           Telephone
           <input
             value={this.state.number}
-            onChange={this.props.onInputChange}
+            onChange={this.onInputChange}
             type="tel"
             name="number"
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"

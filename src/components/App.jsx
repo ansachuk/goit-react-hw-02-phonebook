@@ -1,6 +1,10 @@
 import { Component } from 'react';
 
+import { nanoid } from 'nanoid';
+
 import ContactForm from './ContactForm/ContactForm';
+import Filter from './Filter/Filter';
+import ContactList from './ContactList/ContactList';
 
 const INITIAL_STATE = {
   filter: '',
@@ -22,46 +26,32 @@ export class App extends Component {
     this.setState({ [name]: value });
   };
 
-  //   <div>
-  //   <h1>Phonebook</h1>
-  //   <ContactForm ... />
+  onContactSave = e => {
+    e.preventDefault();
+    const form = e.currentTarget;
 
-  //   <h2>Contacts</h2>
-  //   <Filter ... />
-  //   <ContactList ... />
-  // </div>
+    this.setState(prevState => {
+      return {
+        contacts: [
+          ...prevState.contacts,
+          { name: form.name.value, number: form.number.value, id: nanoid() },
+        ],
+        ...INITIAL_STATE,
+      };
+    });
+  };
 
   render() {
-    const { state, onInputChange } = this;
+    const { state, onInputChange, onContactSave } = this;
     return (
       <>
         <h1>Phone Book</h1>
 
-        <ContactForm onInputChange={onInputChange}></ContactForm>
-        <br />
+        <ContactForm onSubmit={onContactSave}></ContactForm>
         <h2>Contacts</h2>
-        <label>
-          <input
-            value={state.filter}
-            onChange={onInputChange}
-            type="text"
-            name="filter"
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            required
-          />
-        </label>
-        <ul>
-          {state.contacts
-            .filter(({ name }) =>
-              name.toLowerCase().includes(this.state.filter.toLowerCase())
-            )
-            .map(({ name, number }) => (
-              <li key={name}>
-                {name}:{number}
-              </li>
-            ))}
-        </ul>
+
+        <Filter onInputChange={onInputChange} filter={state.filter} />
+        <ContactList contacts={state.contacts} filter={state.filter} />
       </>
     );
   }
