@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import { nanoid } from 'nanoid';
 
@@ -8,6 +9,10 @@ const INITIAL_STATE = {
 };
 
 export default class ContactForm extends Component {
+  static propTypes = {
+    onSubmit: PropTypes.func.isRequired,
+  };
+
   state = { ...INITIAL_STATE };
 
   onInputChange = e => {
@@ -17,11 +22,14 @@ export default class ContactForm extends Component {
 
   onFormSubmit = e => {
     e.preventDefault();
+    const {
+      props: { onSubmit },
+    } = this;
     const form = e.currentTarget;
 
     this.setState({ ...INITIAL_STATE });
 
-    return this.props.onSubmit({
+    return onSubmit({
       name: form.name.value,
       number: form.number.value,
       id: nanoid(),
@@ -29,13 +37,19 @@ export default class ContactForm extends Component {
   };
 
   render() {
+    const {
+      onFormSubmit,
+      onInputChange,
+      state: { name, number },
+    } = this;
+
     return (
-      <form onSubmit={this.onFormSubmit}>
+      <form onSubmit={onFormSubmit}>
         <label>
           Name
           <input
-            value={this.state.name}
-            onChange={this.onInputChange}
+            value={name}
+            onChange={onInputChange}
             type="text"
             name="name"
             pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
@@ -46,8 +60,8 @@ export default class ContactForm extends Component {
         <label>
           Telephone
           <input
-            value={this.state.number}
-            onChange={this.onInputChange}
+            value={number}
+            onChange={onInputChange}
             type="tel"
             name="number"
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
