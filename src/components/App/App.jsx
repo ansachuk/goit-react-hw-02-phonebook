@@ -49,7 +49,6 @@ export class App extends Component {
     return (
       <>
         <h1 className={css.title}>Phone Book</h1>
-        <p>+380123123123</p>
 
         <ContactForm onSubmit={onContactSave}></ContactForm>
         <h2 className={css.subtitle}>Contacts</h2>
