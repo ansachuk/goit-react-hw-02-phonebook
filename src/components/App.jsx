@@ -23,6 +23,14 @@ export class App extends Component {
     this.setState({ [name]: value });
   };
 
+  onDeleteClick = id => {
+    return this.setState(prevState => {
+      return {
+        contacts: prevState.contacts.filter(contact => contact.id !== id),
+      };
+    });
+  };
+
   onContactSave = contactData => {
     const hasSameContactName = this.state.contacts.some(
       contact => contact.name === contactData.name
@@ -50,7 +58,11 @@ export class App extends Component {
         <h2>Contacts</h2>
 
         <Filter onInputChange={onInputChange} filter={state.filter} />
-        <ContactList contacts={state.contacts} filter={state.filter} />
+        <ContactList
+          contacts={state.contacts}
+          filter={state.filter}
+          onDeleteClick={this.onDeleteClick}
+        />
       </>
     );
   }
