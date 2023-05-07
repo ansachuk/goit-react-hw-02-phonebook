@@ -2,9 +2,10 @@ import { Component } from 'react';
 
 import { Notify } from 'notiflix';
 
-import ContactForm from './ContactForm/ContactForm';
-import Filter from './Filter/Filter';
-import ContactList from './ContactList/ContactList';
+import ContactForm from '../ContactForm/ContactForm';
+import Filter from '../Filter/Filter';
+import ContactList from '../ContactList/ContactList';
+import css from './App.module.css';
 
 export class App extends Component {
   state = {
@@ -47,10 +48,11 @@ export class App extends Component {
     const { state, onInputChange, onContactSave, onDeleteClick } = this;
     return (
       <>
-        <h1>Phone Book</h1>
+        <h1 className={css.title}>Phone Book</h1>
+        <p>+380123123123</p>
 
         <ContactForm onSubmit={onContactSave}></ContactForm>
-        <h2>Contacts</h2>
+        <h2 className={css.subtitle}>Contacts</h2>
 
         <Filter onInputChange={onInputChange} filter={state.filter} />
         {state.contacts.length ? (
@@ -60,7 +62,7 @@ export class App extends Component {
             onDeleteClick={onDeleteClick}
           />
         ) : (
-          <p>You have no contacts yet</p>
+          <p className={css.message}>You have no contacts yet!</p>
         )}
       </>
     );

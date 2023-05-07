@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import { nanoid } from 'nanoid';
 
+import css from './ContactForm.module.css';
+
 const INITIAL_STATE = {
   name: '',
   number: '',
@@ -43,33 +45,40 @@ export default class ContactForm extends Component {
       state: { name, number },
     } = this;
 
+    // className={css.form}
     return (
-      <form onSubmit={onFormSubmit}>
-        <label>
+      <form className={css.form} onSubmit={onFormSubmit}>
+        <label className={css.label}>
           Name
           <input
             value={name}
             onChange={onInputChange}
+            className={css.name}
             type="text"
             name="name"
             pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
             title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+            autoComplete="off"
             required
           />
         </label>
-        <label>
+        <label className={css.label}>
           Telephone
           <input
             value={number}
             onChange={onInputChange}
+            className={css.number}
             type="tel"
             name="number"
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+            autoComplete="off"
             required
           />
         </label>
-        <button type="submit">Add contact</button>
+        <button className={css.submitButton} type="submit">
+          Add contact
+        </button>
       </form>
     );
   }
